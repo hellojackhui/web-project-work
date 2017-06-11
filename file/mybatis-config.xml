@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">  
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="true" />
+        <setting name="lazyLoadingEnabled" value="true" />
+       <setting name="aggressiveLazyLoading" value="true" />
+      <setting name="multipleResultSetsEnabled" value="true" />
+        <setting name="useColumnLabel" value="true" />
+      <setting name="useGeneratedKeys" value="true" />
+      <setting name="autoMappingBehavior" value="PARTIAL" />
+
+<setting name="autoMappingUnknownColumnBehavior" value="WARNING"/>
+       <setting name="defaultExecutorType" value="SIMPLE" />
+       <setting name="defaultStatementTimeout" value="25000" />
+<setting name="defaultFetchSize" value="100"/>
+<setting name="safeRowBoundsEnabled" value="false"/>
+<setting name="mapUnderscoreToCamelCase" value="false"/>
+<setting name="localCacheScope" value="SESSION"/>
+<setting name="jdbcTypeForNull" value="OTHER"/>
+<setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/> 
+    </settings>  
+
+    <typeAliases>  
+        <typeAlias alias="pageAccessURL" type="com.lgm.mybatis.model.PageAccessURL" />  
+    </typeAliases>  
+
+    <typeHandlers>
+
+<package name="com.xhm.util"/>
+    </typeHandlers>
+
+
+    <plugins>
+    <plugin interceptor="com.xhm.util.PageInterceptor"></plugin>
+    </plugins>
+
+    <!--environment-->
+    <environments default="development">  
+        <!-- SqlSessionFactory -->
+        <environment id="development1">  
+            <!-- �������� type= JDBC��MANAGED 1.JDBC:�������ֱ�Ӽ�ʹ����JDBC���ύ�ͻع����á��������ڴ�����Դ�õ�����������������Χ��   
+                2.MANAGED:������ü���û��ʲô�����������ύ��ع�һ�����ӡ�����������������������������������ڣ�����Spring��JEEӦ�÷������������ģ��� Ĭ�����������ر����ӡ�Ȼ��һЩ��������ϣ������������������Ҫ��������ֹͣ������closeConnection��������Ϊfalse -->  
+            <transactionManager type="JDBC" />  
+        <!-- <transactionManager type="MANAGED">   
+             <property name="closeConnection" value="false"/>   
+             </transactionManager> -->  
+            <!-- ����Դ���ͣ�type = UNPOOLED��POOLED��JNDI 1.UNPOOLED���������Դ��ʵ����ÿ�α�����ʱ�򵥴򿪺͹ر����ӡ�����һ���������ǶԼ�Ӧ�ó����һ���ܺõ�ѡ����Ϊ������Ҫ��ʱ�Ŀ������ӡ�   
+                ��ͬ�����ݿ������ı���Ҳ�ǲ�һ���ģ����Զ�ĳЩ���ݿ���˵��������Դ������Ҫ���������Ҳ�����õ� 2.POOLED������JDBC���Ӷ��������Դ���ӳص�ʵ�֣��������ⴴ���µ�����ʵ��ʱ��Ҫ�ĳ�ʼ���Ӻ���֤ʱ�䡣   
+                ����һ�ֵ�ǰWebӦ�ó�������������Ӧ��������еķ����� 3.JNDI���������Դ��ʵ����Ϊ��ʹ����Spring��Ӧ�÷�����������������������Լ��л����ⲿ��������Դ��Ȼ�����һ��JNDI�����ĵ����� -->  
+            <dataSource type="UNPOOLED">  
+                <property name="driver" value="com.mysql.jdbc.Driver" />  
+                <property name="url" value="jdbc:mysql://localhost:3306/xhm" />  
+                <property name="username" value="root" />  
+                <property name="password" value="root" />  
+                <!-- Ĭ������������뼶�� <property name="defaultTransactionIsolationLevel" value=""   
+                    /> -->  
+            </dataSource>  
+        </environment>  
+  
+        <!-- ��������2 -->  
+        <environment id="development2">  
+            <transactionManager type="JDBC" />  
+            <dataSource type="POOLED">  
+                <property name="driver" value="com.mysql.jdbc.Driver" />  
+                <property name="url" value="jdbc:mysql://localhost:3306/xhm" />  
+                <property name="username" value="root" />  
+                <property name="password" value="root" />  
+                <!-- ������ʱ����ڵĻ��Ҳ��������ʹ�ã����ӵ����� -->  
+                <property name="poolMaximumActiveConnections" value="10" />  
+                <!-- ����ʱ����ڵĿ��������� -->  
+                <property name="poolMaximumIdleConnections" value="5" />  
+                <!-- �ڱ�ǿ�Ʒ���֮ǰ���������ӱ�����ʱ�� -->  
+                <property name="poolMaximumCheckoutTime" value="20000" />  
+                <!-- ���Ǹ����ӳ�һ����ӡ��־״̬����ĵͲ�����ã��������³��Ի�����ӣ���Щ�����������Ҫ�ܳ�ʱ�䣨Ϊ�˱������ӳ�û������ʱ��Ĭʧ�ܣ� -->  
+                <property name="poolTimeToWait" value="20000" />  
+                <!-- ���͵����ݵ�����ѯ��������֤�����Ƿ���������������׼���������� -->  
+                <property name="poolPingQuery" value="NO PING QUERY SET" />  
+                <!-- ���ǿ������������ѯ������������������һ���Ϸ���SQL��䣨����Ǻܿ��ٵģ�����poolPingQuery���� -->  
+                <property name="poolPingEnabled" value="false" />  
+                <!-- ������������poolPingQuery���ʱ�䱻��һ�Ρ�����Ա�����ƥ���׼�����ݿ����ӳ�ʱʱ�䣬�����ⲻ��Ҫ����� -->  
+                <property name="poolPingConnectionsNotUsedFor" value="0" />  
+            </dataSource>  
+        </environment>  
+  
+        <!-- ��������3 -->  
+        <environment id="development3">  
+            <transactionManager type="JDBC" />  
+            <dataSource type="JNDI">  
+                <property name="data_source" value="java:comp/env/jndi/mybatis" />  
+                <property name="env.encoding" value="UTF8" />  
+                <!-- <property name="initial_context" value=""/> <property name="env.encoding"   
+                    value="UTF8"/> -->  
+            </dataSource>  
+        </environment>  
+    </environments>  
+  
+    <!-- ӳ���ļ���mapper�������ļ� -->  
+    <mappers>
+<!--ֱ��ӳ�䵽��Ӧ��mapper�ļ�-->
+<mapper resource="com/xhm/mapper/UserMapper.xml"/>
+<!--ɨ���·��������xxMapper.xml�ļ�-->
+<package name="com.xhm.mapper"/>
+    </mappers>  
+  
+</configuration>  
